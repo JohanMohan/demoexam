@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- ФОРМА СОЗДАНИЯ ЗАЯВКИ -->
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-file-alt fa-2x mb-3" style="color: #0d47a1;"></i>
+                    <h2 class="fw-bold" style="color: #333;">Новая заявка</h2>
+                    <p class="text-muted">Заполните форму для записи на обучение</p>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-bus me-1"></i> Выберите курс
+                        </label>
+                        <select name="course" class="form-select form-select-lg" required>
+                            <option value="">-- Выберите тип транспорта --</option>
+                            {% for course in courses %}
+                            <option value="{{ course.id }}" {% if form.course.value == course.id %}selected{% endif %}>
+                                {{ course.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.course.errors %}
+                            <div class="text-danger small mt-1">{{ form.course.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-calendar-alt me-1"></i> Дата начала обучения
+                        </label>
+                        <input type="text" name="start_date" class="form-control form-control-lg" placeholder="ДД.ММ.ГГГГ" value="{{ form.start_date.value|date:'d.m.Y'|default:'' }}" required>
+                        <div class="form-text">Пример: 21.05.2026</div>
+                        {% if form.start_date.errors %}
+                            <div class="text-danger small mt-1">{{ form.start_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-credit-card me-1"></i> Способ оплаты
+                        </label>
+                        <div class="bg-light rounded-3 p-3">
+                            <div class="form-check mb-2">
+                                <input type="radio" name="payment_method" value="cash" class="form-check-input" id="cash" {% if form.payment_method.value == 'cash' %}checked{% endif %} required>
+                                <label class="form-check-label" for="cash">
+                                    <i class="fas fa-mobile me-2"></i>Предоплата по QR-коду
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" name="payment_method" value="transfer" class="form-check-input" id="transfer" {% if form.payment_method.value == 'transfer' %}checked{% endif %}>
+                                <label class="form-check-label" for="transfer">
+                                    <i class="fas fa-mobile-alt me-2"></i>Оплата картой МИР
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input type="radio" name="payment_method" value="post" class="form-check-input" id="post" {% if form.payment_method.value == 'post' %}checked{% endif %} required>
+                                <label class="form-check-label" for="cash">
+                                    <i class="fas fa-money-bill-wave me-2"></i>Постоплата в офисе организации
+                                </label>
+                            </div>
+                            {% if form.payment_method.errors %}
+                                <div class="text-danger small mt-1">{{ form.payment_method.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-gradient w-100 py-3 fw-bold">
+                        <i class="fas fa-paper-plane me-2"></i>Отправить заявку
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card border-0 bg-light mt-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="small text-muted">
+                        <i class="fas fa-clock me-1"></i> После отправки заявка будет рассмотрена администратором
+                    </div>
+                    <a href="{% url 'my_applications' %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-list me-1"></i>Мои заявки
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

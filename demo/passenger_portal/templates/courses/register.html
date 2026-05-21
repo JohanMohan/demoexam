@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- ФОРМА РЕГИСТРАЦИИ -->
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-plus fa-2x mb-3" style="color: #0d47a1;"></i>
+                    <h2 class="fw-bold" style="color: #333;">Регистрация</h2>
+                    <p class="text-muted">Создайте аккаунт для записи на курсы</p>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-user me-1"></i> Логин
+                        </label>
+                        <input type="text" name="username" class="form-control form-control-lg" value="{{ form.username.value|default:'' }}" required>
+                        <div class="form-text">Латиница и цифры, не менее 6 символов</div>
+                        {% if form.username.errors %}
+                            <div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-lock me-1"></i> Пароль
+                        </label>
+                        <input type="password" name="password" class="form-control form-control-lg" required>
+                        <div class="form-text">Минимум 8 символов</div>
+                        {% if form.password.errors %}
+                            <div class="text-danger small mt-1">{{ form.password.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-lock me-1"></i> Подтверждение пароля
+                        </label>
+                        <input type="password" name="password_confirm" class="form-control form-control-lg" required>
+                        {% if form.password_confirm.errors %}
+                            <div class="text-danger small mt-1">{{ form.password_confirm.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-id-card me-1"></i> ФИО
+                        </label>
+                        <input type="text" name="full_name" class="form-control form-control-lg" value="{{ form.full_name.value|default:'' }}" placeholder="Иванов Иван Иванович" required>
+                        <div class="form-text">Только кириллица и пробелы</div>
+                        {% if form.full_name.errors %}
+                            <div class="text-danger small mt-1">{{ form.full_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-phone me-1"></i> Телефон
+                        </label>
+                        <input type="tel" name="phone" class="form-control form-control-lg" value="{{ form.phone.value|default:'' }}" placeholder="8(999)123-45-67" required>
+                        <div class="form-text">Формат: 8(XXX)XXX-XX-XX</div>
+                        {% if form.phone.errors %}
+                            <div class="text-danger small mt-1">{{ form.phone.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-envelope me-1"></i> Электронная почта
+                        </label>
+                        <input type="email" name="email" class="form-control form-control-lg" value="{{ form.email.value|default:'' }}" placeholder="example@mail.ru" required>
+                        {% if form.email.errors %}
+                            <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <button type="submit" class="btn btn-gradient w-100 py-3 fw-bold">
+                        <i class="fas fa-check-circle me-2"></i>Зарегистрироваться
+                    </button>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="mb-0">Уже есть аккаунт? 
+                        <a href="{% url 'login' %}" class="text-decoration-none fw-semibold">Войти</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
